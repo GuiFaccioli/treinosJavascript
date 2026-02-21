@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Array Treino</h1>
+<input type="text" id="textoDigitado" placeholder="Digite um número">
+    <button onclick="adicionar()">Adicionar Elemento</button>
+    <ul id="lista"></ul>
+
+
+    <script>
+function adicionar() {
+  let digitado = document.getElementById("textoDigitado").value;
+  let novoItem = document.createElement("li");
+  novoItem.innerText = digitado;
+  document.getElementById("lista").appendChild(novoItem);
+
+    }
+
+    </script>
+</body>
+</html>
