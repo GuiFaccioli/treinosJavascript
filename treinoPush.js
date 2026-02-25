@@ -56,7 +56,7 @@ if (!quarto.includes ("Cobertor")) {
 
 if (!quarto.includes ("Cabeceira")) {
 
-    quarto.push("Cobertor") 
+    quarto.push("Cabeceira") 
 
     console.log(quarto)
 
