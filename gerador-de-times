@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Define codificação de caracteres -->
+  <meta charset="UTF-8" />
+
+  <!-- Faz o layout se adaptar ao tamanho da tela (responsividade básica) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Gerador de times</title>
+</head>
+
+<body>
+
+  <!-- Container principal -->
+  <div id="topo">
+
+    <!-- Título da aplicação -->
+    <h1>Gerador de times</h1>
+
+    <!-- Campo de entrada de texto para adicionar jogador -->
+    <input type="text" id="input" />
+
+    <!-- Botão que executa a função adicionando() ao ser clicado -->
+    <button id="btn" onclick="adicionando()">Adicionar</button>
+
+  </div>
+
+  <!-- Lista onde os jogadores serão inseridos dinamicamente -->
+  <ul id="lista"></ul>
+
+  <!-- Botão que executa a geração dos times -->
+  <button onclick="gerarTimes()">Gerar Times</button>
+
+  <!-- Estrutura visual para exibir os times -->
+  <h4>Time 1:</h4>
+  <ul id="time1"></ul>
+
+  <h4>Time 2:</h4>
+  <ul id="time2"></ul>
+
+  <script>
+
+    // ==========================
+    // FUNÇÃO PARA ADICIONAR JOGADOR
+    // ==========================
+    function adicionando() {
+
+      // Captura o elemento input pelo ID
+      const input = document.getElementById("input");
+
+      // Captura a lista onde os jogadores são armazenados
+      const lista = document.getElementById("lista");
+
+      // Remove espaços extras do início e fim
+      const nome = input.value.trim();
+
+      // Validação: impede inserir valor vazio
+      if (nome === "") return;
+
+      // Cria dinamicamente um novo elemento <li>
+      const li = document.createElement("li");
+
+      // Define o texto do jogador dentro do <li>
+      // O espaço final ajuda a separar do botão
+      li.textContent = nome + " ";
+
+      // Cria dinamicamente um botão de remover
+      const botao = document.createElement("button");
+
+      // Define o texto do botão
+      botao.textContent = "Remover";
+
+      // Define o comportamento do botão ao ser clicado
+      // Aqui usamos uma função anônima
+      botao.onclick = function () {
+
+        // Remove o <li> completo da DOM
+        li.remove();
+      };
+
+      // Insere o botão dentro do <li>
+      li.appendChild(botao);
+
+      // Insere o <li> dentro da <ul>
+      lista.appendChild(li);
+
+      // Limpa o campo após adicionar
+      input.value = "";
+
+      // Coloca o cursor novamente no input (melhora UX)
+      input.focus();
+    }
+
+    // ==========================
+    // FUNÇÃO PARA GERAR TIMES
+    // ==========================
+    function gerarTimes() {
+
+      // Captura todos os <li> dentro da lista
+      const lista = document.getElementById("lista");
+
+      // Converte NodeList em Array real
+      // map extrai apenas o nome do jogador
+      const jogadores = Array.from(lista.querySelectorAll("li")).map(li => {
+
+        // firstChild.nodeValue pega apenas o texto
+        // (evita pegar o texto do botão)
+        return li.firstChild.nodeValue.trim();
+      });
+
+      // Validação mínima: pelo menos 2 jogadores
+      if (jogadores.length < 2) {
+        alert("Adicione pelo menos 2 jogadores.");
+        return;
+      }
+
+      // ==========================
+      // EMBARALHAMENTO (Algoritmo Fisher-Yates)
+      // ==========================
+      // Garante distribuição aleatória real
+      for (let i = jogadores.length - 1; i > 0; i--) {
+
+        // Sorteia índice entre 0 e i
+        const j = Math.floor(Math.random() * (i + 1));
+
+        // Troca os elementos de posição
+        [jogadores[i], jogadores[j]] = [jogadores[j], jogadores[i]];
+      }
+
+      // Arrays para armazenar os times
+      const time1 = [];
+      const time2 = [];
+
+      // Distribui alternadamente entre os times
+      jogadores.forEach((nome, idx) => {
+
+        if (idx % 2 === 0) {
+          time1.push(nome);
+        } else {
+          time2.push(nome);
+        }
+      });
+
+      // Captura as ULs onde os times serão exibidos
+      const ulTime1 = document.getElementById("time1");
+      const ulTime2 = document.getElementById("time2");
+
+      // Limpa os times antes de renderizar novamente
+      ulTime1.innerHTML = "";
+      ulTime2.innerHTML = "";
+
+      // Renderiza Time 1 na tela
+      time1.forEach(nome => {
+        const li = document.createElement("li");
+        li.textContent = nome;
+        ulTime1.appendChild(li);
+      });
+
+      // Renderiza Time 2 na tela
+      time2.forEach(nome => {
+        const li = document.createElement("li");
+        li.textContent = nome;
+        ulTime2.appendChild(li);
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>
